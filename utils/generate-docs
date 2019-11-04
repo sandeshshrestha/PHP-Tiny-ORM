@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# Generate docs
+wget http://www.phpdoc.org/phpDocumentor.phar
+mv phpDocumentor.phar phpdoc
+chmod +x phpdoc
+./phpdoc --template responsive-twig -d src -t docs/
+rm phpdoc
+git add docs
+git commit -m "Generated docs"
+git push
