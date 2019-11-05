@@ -7,6 +7,7 @@ composer require sandeshshrestha/tiny-orm
 ```
 
 ### Configuration
+Define few constants.
 ```php
 // Define __FILE_STORAGE_PATH__ constant where the FileStorage::save() method saves the file.
 define("__FILE_STORAGE_PATH__", __DIR__ . '/uploaded_files/');
@@ -19,6 +20,18 @@ define("__DATABASE_CONFIG__", [
     'database' => 'db_name',
     'table_prefix' => 'db_table_prefix'
   ]);
+```
+
+### Database
+Create database tables
+```sql
+CREATE TABLE `db_table_prefix_user` (
+  `id` varchar(255) NOT NULL,
+  `fullName` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
 ### Usage
