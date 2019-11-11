@@ -64,4 +64,4 @@ $users = User::where("fullName", "John Doe")->limit(1)->orderBy('id')->exec();
 ```
 
 ### Documentations
-[https://sandeshshrestha.github.io/php-tiny-orm/](https://sandeshshrestha.github.io/php-tiny-orm/)
+[https://sandeshshrestha.github.io/PHP-Tiny-ORM/](https://sandeshshrestha.github.io/PHP-Tiny-ORM/)
