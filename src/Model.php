@@ -70,10 +70,10 @@ class Model {
    *
    * @return string
    */
-  protected function getPrimaryValue(): string {
+  public function getPrimaryValue(): string {
     $key = $this->getPrimaryKey();
 
-    return $this->{$key};
+    return $this->{$key} ? $this->{$key} : '';
   }
 
   /**
@@ -91,7 +91,7 @@ class Model {
    *
    * @return Model
    */
-  public static function find(string $id): Model {
+  public static function find(string $id) {
     $obj = new static();
     $table = $obj->getTable();
     $primaryKey = $obj->getPrimaryKey();
