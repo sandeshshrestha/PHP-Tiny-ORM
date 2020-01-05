@@ -1,7 +1,7 @@
 {
     "name": "sandeshshrestha/tiny-orm",
     "description": "Tiny ORM to map between objects and database queries",
-    "version": "1.0",
+    "version": "1.1",
     "type": "library",
     "keywords": ["PHP", "ORM"],
     "homepage": "https://php-tiny-orm.sandeshshrestha.com",
