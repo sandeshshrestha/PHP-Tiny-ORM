@@ -35,9 +35,10 @@ class MYSQLDatabase implements IDatabase {
     $username = __DATABASE_CONFIG__['username'];
     $password = __DATABASE_CONFIG__['password'];
     $database = __DATABASE_CONFIG__['database'];
+    $port = __DATABASE_CONFIG__['port'];
     
     if(self::$conn == NULL) {
-      self::$conn = new mysqli($host, $username, $password, $database);
+      self::$conn = new mysqli($host, $username, $password, $database, $port ? $port : 3306);
       if ($mysqli->connect_errno) {
         die("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
       }

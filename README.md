@@ -18,7 +18,8 @@ define("__DATABASE_CONFIG__", [
     'username' => 'db_username',
     'password' => 'db_password',
     'database' => 'db_name',
-    'table_prefix' => 'db_table_prefix'
+    'table_prefix' => 'db_table_prefix',
+    'port' => 3306
   ]);
 ```
 
