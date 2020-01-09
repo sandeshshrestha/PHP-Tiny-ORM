@@ -72,7 +72,7 @@ class MYSQLDatabase implements IDatabase {
       $sql = $sql . " WHERE";
 
       foreach ($where as $index => $value) {
-        $sql = $sql . " " . $value['column'] . " " . $value['operator'] . " '" . $value['value'] . "'";
+        $sql = $sql . " " . self::sanitizeStringWithoutSpace($value['column']) . " " . self::sanitizeOperator($value['operator']) . " '" . self::sanitizeString($value['value']) . "'";
 
         if ($index + 1 < $whereLength) {
           $sql = $sql . " AND";
@@ -84,7 +84,7 @@ class MYSQLDatabase implements IDatabase {
       $sql = $sql . " ORDER BY";
 
       foreach ($orderBys as $index => $value) {
-        $sql = $sql . " " . $value['column'] . " " . $value['dir'];
+        $sql = $sql . " " . self::sanitizeStringWithoutSpace($value['column']) . " " . self::sanitizeStringWithoutSpace($value['dir']);
 
         if ($index + 1 < $orderLength) {
           $sql = $sql . ", ";
@@ -93,10 +93,10 @@ class MYSQLDatabase implements IDatabase {
     }
 
     if ($limit) {
-      $sql = $sql . " LIMIT " . $limit;
+      $sql = $sql . " LIMIT " . self::sanitizeStringWithoutSpace($limit);
     }
     if ($offset) {
-      $sql = $sql . " OFFSET " . $offset;
+      $sql = $sql . " OFFSET " . self::sanitizeStringWithoutSpace($offset);
     }
 
     return $sql;
@@ -121,8 +121,8 @@ class MYSQLDatabase implements IDatabase {
     $values = "";
 
     foreach ($data as $key => $value) {
-      $columnNames = $columnNames . $key . ", ";
-      $values = $values . "'" . $value . "', ";
+      $columnNames = $columnNames . self::sanitizeStringWithoutSpace($key) . ", ";
+      $values = $values . "'" . self::sanitizeString($value) . "', ";
     }
 
     $columnNames = $columnNames . " created_at, updated_at";
@@ -153,7 +153,7 @@ class MYSQLDatabase implements IDatabase {
     $columnNames = "";
 
     foreach ($data as $key => $value) {
-      $columnNames = $columnNames . $key . "='" . $value . "', ";
+      $columnNames = $columnNames . self::sanitizeStringWithoutSpace($key) . "='" . self::sanitizeString($value) . "', ";
     }
 
     $columnNames = $columnNames . " updated_at=CURRENT_TIMESTAMP";
@@ -164,7 +164,7 @@ class MYSQLDatabase implements IDatabase {
       $sql = $sql . " WHERE";
 
       foreach ($where as $index => $value) {
-        $sql = $sql . " " . $value['column'] . " " . $value['operator'] . " '" . $value['value'] . "'";
+        $sql = $sql . " " . self::sanitizeStringWithoutSpace($value['column']) . " " . self::sanitizeOperator($value['operator']) . " '" . self::sanitizeString($value['value']) . "'";
 
         if ($index + 1 < $whereLength) {
           $sql = $sql . " AND";
@@ -196,7 +196,7 @@ class MYSQLDatabase implements IDatabase {
       $sql = $sql . " WHERE";
 
       foreach ($where as $index => $value) {
-        $sql = $sql . " " . $value['column'] . " " . $value['operator'] . " '" . $value['value'] . "'";
+        $sql = $sql . " " . self::sanitizeStringWithoutSpace($value['column']) . " " . self::sanitizeOperator($value['operator']) . " '" . self::sanitizeString($value['value']) . "'";
 
         if ($index + 1 < $whereLength) {
           $sql = $sql . " AND";
@@ -281,5 +281,27 @@ class MYSQLDatabase implements IDatabase {
     $conn->query($sql);
     
     return true;
+  }
+
+  private static function sanitizeStringWithoutSpace($string) {
+    return str_replace(' ', '', $string);
+  }
+
+  private static function sanitizeString($string) {
+    return filter_var(str_replace(';', '\;', $string), FILTER_SANITIZE_SPECIAL_CHARS);
+  }
+
+  private static function sanitizeOperator($operator) {
+    if (
+      $operator == '=' ||
+      $operator == '>' ||
+      $operator == '<' ||
+      $operator == '>=' ||
+      $operator == '<=' ||
+      $operator == '<>'
+    ) {
+      return $operator;
+    }
+    throw new \Exception("Invalid operator: $operator");
   }
 }
