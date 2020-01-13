@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Insert.php
  */
@@ -9,10 +10,10 @@ use TinyORM\Database;
 
 /**
  * Insert class
- * 
+ *
  * This class holds all the information regarding INSERT operation,
  * that will be used by Database class.
- * 
+ *
  * **Example**
  * ```
  * $data = [
@@ -23,7 +24,8 @@ use TinyORM\Database;
  * ```
  */
 
-class Insert {
+class Insert
+{
   /** @var string $table Database table */
   public $table;
   /** @var array $data Column data*/
@@ -37,27 +39,29 @@ class Insert {
    *
    * @return void
    */
-  public function __construct(string $table, array $data) {
+  public function __construct(string $table, array $data)
+  {
     $this->table = $table;
     $this->data = $data;
   }
 
   /**
    * exec
-   * 
+   *
    * Execute the constructed INSERT operation
    *
    * @return string
    */
-  public function exec(): string {
+  public function exec(): string
+  {
     return Database::insert($this);
   }
 
   /**
    * toString
-   * 
+   *
    * Return the SQL query
-   * 
+   *
    * **Example**
    * ```
    * $data = [
@@ -70,7 +74,8 @@ class Insert {
    *
    * @return string
    */
-  public function toString(): string {
+  public function toString(): string
+  {
     return Database::insertToString($this);
   }
 }

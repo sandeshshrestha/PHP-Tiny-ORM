@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Validator.php
  */
@@ -9,15 +10,15 @@ use TinyORM\Query;
 
 /**
  * Validator class
- * 
+ *
  * This class holds utils to validate data.
- * 
+ *
  * **Example**
  * ```
  * $data = [
  *  "name" => "John Doe"
  * ];
- * 
+ *
  * $config = [
  *  "name" => [
  *    "require" => true
@@ -26,9 +27,10 @@ use TinyORM\Query;
  * $validator = new Validator($data, $config);
  * echo $validator->isValid(); // Returns 'true'
  * ```
- * 
+ *
  */
-class Validator {
+class Validator
+{
   /** @var array $data Data*/
   protected $data;
   /** @var array $config Config*/
@@ -46,7 +48,8 @@ class Validator {
    *
    * @return void
    */
-  public function __construct(array $data, array $config) {
+  public function __construct(array $data, array $config)
+  {
     $this->data = $data;
     $this->config = $config;
 
@@ -55,12 +58,13 @@ class Validator {
 
   /**
    * validate
-   * 
+   *
    * Method that calculate if the 'data' is valid according to 'config'
    *
    * @return void
    */
-  protected function validate(): void {
+  protected function validate(): void
+  {
     $errors = [];
     $data = $this->data;
 
@@ -80,27 +84,23 @@ class Validator {
         if ($val) {
           if ($type === 'email' && !filter_var($val, FILTER_VALIDATE_EMAIL)) {
             $err = "Invalid email.";
-          }
-          elseif ($unique) {
+          } elseif ($unique) {
             $query = new Query($unique);
             $rows = $query->where($key, $val)->limit(1)->exec();
-    
+
             if (sizeof($rows) > 0) {
               $err = "$val already exists.";
             }
-          }
-          elseif ($confirmed) {
+          } elseif ($confirmed) {
             $key_confirmed = $key . "_confirmation";
             $val_confirmed = $data[$key_confirmed];
-    
+
             if (!$val_confirmed) {
               $err = "$key_confirmed cannot be empty.";
-            }
-            elseif ($val !== $val_confirmed) {
+            } elseif ($val !== $val_confirmed) {
               $err = "$key and $key_confirmed does not match";
             }
-          }
-          elseif($exists) {
+          } elseif ($exists) {
             $abdfd = explode(',', $exists);
             $query = new Query($abdfd[0]);
             $_key = $key;
@@ -108,9 +108,9 @@ class Validator {
             if ($abdfd[1]) {
               $_key = $abdfd[1];
             }
-            
+
             $rows = $query->where($_key, $val)->limit(1)->exec();
-    
+
             if (sizeof($rows) === 0) {
               $err = "$val doesnot exists.";
             }
@@ -134,15 +134,15 @@ class Validator {
 
   /**
    * isValid
-   * 
+   *
    * Returns the validity of 'data'
-   * 
+   *
    * **Example**
    * ```
    * $data = [
    *  "name" => "John Doe"
    * ];
-   * 
+   *
    * $config = [
    *  "name" => [
    *    "require" => true
@@ -154,19 +154,20 @@ class Validator {
    *
    * @return bool
    */
-  public function isValid(): bool {
+  public function isValid(): bool
+  {
     return $this->_isValid;
   }
 
   /**
    * getErrors
-   * 
+   *
    * Returns array of errors if isValid() == false
-   * 
+   *
    * **Example**
    * ```
    * $data = [];
-   * 
+   *
    * $config = [
    *  "name" => [
    *    "require" => true
@@ -179,7 +180,8 @@ class Validator {
    *
    * @return array
    */
-  public function getErrors(): array {
+  public function getErrors(): array
+  {
     return $this->errors;
   }
 }

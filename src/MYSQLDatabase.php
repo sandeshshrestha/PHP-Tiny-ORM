@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MYSQLDatabase.php
  */
@@ -14,30 +15,32 @@ use \mysqli;
 
 /**
  * MYSQLDatabase class
- * 
+ *
  * This class holds the logics to convert Query/Update/Insert/Delete class to actual MYSQL query string
  * This class will be extended my Database class
  */
 
-class MYSQLDatabase implements IDatabase {
+class MYSQLDatabase implements IDatabase
+{
   /** @var mysqli $conn MySql connection*/
   private static $conn = null;
 
   /**
    * connection
-   * 
+   *
    * Return mysql connection
    *
    * @return void
    */
-  private static function &connection() {
+  private static function &connection()
+  {
     $host = __DATABASE_CONFIG__['host'];
     $username = __DATABASE_CONFIG__['username'];
     $password = __DATABASE_CONFIG__['password'];
     $database = __DATABASE_CONFIG__['database'];
     $port = __DATABASE_CONFIG__['port'];
-    
-    if(self::$conn == NULL) {
+
+    if (self::$conn == NULL) {
       self::$conn = new mysqli($host, $username, $password, $database, $port ? $port : 3306);
       if ($mysqli->connect_errno) {
         die("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
@@ -49,14 +52,15 @@ class MYSQLDatabase implements IDatabase {
 
   /**
    * selectToString
-   * 
+   *
    * Method that convert TinyORM\Query object to SQL SELECT string
    *
    * @param  Query $query
    *
    * @return string
    */
-  public static function selectToString(Query $query): string {
+  public static function selectToString(Query $query): string
+  {
     $table_prefix = __DATABASE_CONFIG__['table_prefix'];
     $table = $table_prefix . $query->table;
     $limit = $query->limit;
@@ -104,14 +108,15 @@ class MYSQLDatabase implements IDatabase {
 
   /**
    * insertToString
-   * 
+   *
    * Method that convert TinyORM\Insert object to SQL INSERT string
    *
    * @param  Insert $query
    *
    * @return string
    */
-  public static function insertToString(Insert $query): string {
+  public static function insertToString(Insert $query): string
+  {
     $table_prefix = __DATABASE_CONFIG__['table_prefix'];
     $table = $table_prefix . $query->table;
     $data = $query->data;
@@ -135,14 +140,15 @@ class MYSQLDatabase implements IDatabase {
 
   /**
    * updateToString
-   * 
+   *
    * Method that convert TinyORM\Update object to SQL Update string
    *
    * @param  Update $query
    *
    * @return string
    */
-  public static function updateToString(Update $query): string {
+  public static function updateToString(Update $query): string
+  {
     $table_prefix = __DATABASE_CONFIG__['table_prefix'];
     $table = $table_prefix . $query->table;
     $data = $query->data;
@@ -177,14 +183,15 @@ class MYSQLDatabase implements IDatabase {
 
   /**
    * deleteToString
-   * 
+   *
    * Method that convert TinyORM\Delete object to SQL DELETE string
    *
    * @param  Delete $query
    *
    * @return string
    */
-  public static function deleteToString(Delete $query): string {
+  public static function deleteToString(Delete $query): string
+  {
     $table_prefix = __DATABASE_CONFIG__['table_prefix'];
     $table = $table_prefix . $query->table;
     $where = $query->where;
@@ -209,17 +216,18 @@ class MYSQLDatabase implements IDatabase {
 
   /**
    * query
-   * 
+   *
    * Method that execute TinyORM\Query object
    *
    * @param  Query $query
    *
    * @return array
    */
-  public static function query(Query $query): array {
+  public static function query(Query $query): array
+  {
     $conn = self::connection();
     $sql = self::selectToString($query);
-    
+
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -231,67 +239,73 @@ class MYSQLDatabase implements IDatabase {
 
   /**
    * insert
-   * 
+   *
    * Method that execute TinyORM\Insert object
    *
    * @param  Insert $insert
    *
    * @return string
    */
-  public static function insert(Insert $insert): string {
+  public static function insert(Insert $insert): string
+  {
     $conn = self::connection();
     $sql = self::insertToString($insert);
 
     $conn->query($sql);
-    
+
     return $conn->insert_id;
   }
 
   /**
    * update
-   * 
+   *
    * Method that execute TinyORM\Update object
    *
    * @param  Update $update
    *
    * @return bool
    */
-  public static function update(Update $update): bool {
+  public static function update(Update $update): bool
+  {
     $conn = self::connection();
     $sql = self::updateToString($update);
 
     $conn->query($sql);
-    
+
     return true;
   }
 
   /**
    * delete
-   * 
+   *
    * Method that execute TinyORM\Delete object
    *
    * @param  Delete $delete
    *
    * @return bool
    */
-  public static function delete(Delete $delete): bool {
+  public static function delete(Delete $delete): bool
+  {
     $conn = self::connection();
     $sql = self::deleteToString($delete);
 
     $conn->query($sql);
-    
+
     return true;
   }
 
-  private static function sanitizeStringWithoutSpace($string) {
+  private static function sanitizeStringWithoutSpace($string)
+  {
     return str_replace(' ', '', $string);
   }
 
-  private static function sanitizeString($string) {
+  private static function sanitizeString($string)
+  {
     return filter_var(str_replace(';', '\;', $string), FILTER_SANITIZE_SPECIAL_CHARS);
   }
 
-  private static function sanitizeOperator($operator) {
+  private static function sanitizeOperator($operator)
+  {
     if (
       $operator == '=' ||
       $operator == '>' ||

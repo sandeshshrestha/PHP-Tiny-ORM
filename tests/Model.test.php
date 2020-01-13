@@ -7,11 +7,11 @@ use TinyORM\Model;
 
 final class ModelTest extends TestCase
 {
-    public function testIfPrimaryKeyIsID(): void
-    {
-        $this->assertEquals(
-            'id',
-            'id'
-        );
-    }
+  public function testIfPrimaryKeyIsID(): void
+  {
+    $this->assertEquals(
+      'id',
+      'id'
+    );
+  }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Update.php
  */
@@ -9,11 +10,12 @@ use TinyORM\Database;
 
 /**
  * Update class
- * 
+ *
  * This class holds all the information regarding UPDATE operation,
  * that will be used by Database class.
  */
-class Update {
+class Update
+{
   /** @var string $table Database table*/
   public $table;
   /** @var array $data Data*/
@@ -29,14 +31,15 @@ class Update {
    *
    * @return void
    */
-  public function __construct(string $table, array $data) {
+  public function __construct(string $table, array $data)
+  {
     $this->table = $table;
     $this->data = $data;
   }
 
   /**
    * where
-   * 
+   *
    * Add where condition in this UPDATE operation
    *
    * @param  string $column Name of the database table column
@@ -45,12 +48,13 @@ class Update {
    *
    * @return Update
    */
-  public function where(string $column, string $operator, string $value = ''): Update {
+  public function where(string $column, string $operator, string $value = ''): Update
+  {
     if (!$value) {
       $value = $operator;
       $operator = '=';
     }
-    
+
     array_push($this->where, [
       'column' => $column,
       'operator' => $operator,
@@ -62,23 +66,25 @@ class Update {
 
   /**
    * exec
-   * 
+   *
    * Execute the constructed UPDATE operation
    *
    * @return bool
    */
-  public function exec(): bool {
+  public function exec(): bool
+  {
     return Database::update($this);
   }
 
   /**
    * toString
-   * 
+   *
    * Return the SQL query
    *
    * @return string
    */
-  public function toString(): string {
+  public function toString(): string
+  {
     return Database::updateToString($this);
   }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File.php
  */
@@ -7,16 +8,17 @@ namespace TinyORM;
 
 /**
  * File class
- * 
- * This class hold information about a file. 
- * 
+ *
+ * This class hold information about a file.
+ *
  * **Example**
  * ```
  * $file = new File('docs', 'cv.pdf', 'base64 content');
  * ```
  */
-class File {
-   /** @var string $folder Folder */
+class File
+{
+  /** @var string $folder Folder */
   public $folder;
   /** @var string $fileName File name */
   public $fileName;
@@ -32,7 +34,8 @@ class File {
    *
    * @return void
    */
-  public function __construct(string $folder, string $fileName, string $fileContent) {
+  public function __construct(string $folder, string $fileName, string $fileContent)
+  {
     $this->folder = $folder;
     $this->fileName = $fileName;
     $this->fileContent = $fileContent;
@@ -40,12 +43,13 @@ class File {
 
   /**
    * getContent
-   * 
-   * Returns the base64 decoded $fileContent 
+   *
+   * Returns the base64 decoded $fileContent
    *
    * @return string
    */
-  public function getContent(): string {
+  public function getContent(): string
+  {
     return base64_decode($this->fileContent);
   }
 }

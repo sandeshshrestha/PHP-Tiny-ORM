@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Query.php
  */
@@ -9,11 +10,12 @@ use TinyORM\Database;
 
 /**
  * Query class
- * 
+ *
  * This class holds all the information regarding SELECT operation,
  * that will be used by Database class.
  */
-class Query {
+class Query
+{
   /**
    * @var string $table Database table */
   public $table;
@@ -33,13 +35,14 @@ class Query {
    *
    * @return void
    */
-  public function __construct(string $table) {
+  public function __construct(string $table)
+  {
     $this->table = $table;
   }
 
   /**
    * where
-   * 
+   *
    * Add where condition in this SELECT operation
    *
    * @param  string $column Name of the database table column
@@ -48,12 +51,13 @@ class Query {
    *
    * @return Query
    */
-  public function where(string $column, string $operator, string $value = ''): Query {
+  public function where(string $column, string $operator, string $value = ''): Query
+  {
     if (!$value) {
       $value = $operator;
       $operator = '=';
     }
-    
+
     array_push($this->where, [
       'column' => $column,
       'operator' => $operator,
@@ -65,7 +69,7 @@ class Query {
 
   /**
    * orderBy
-   * 
+   *
    * Add ORDER BY in this SELECT operation
    *
    * @param  string $column
@@ -73,7 +77,8 @@ class Query {
    *
    * @return Query
    */
-  public function orderBy(string $column, string $dir = 'ASC'): Query {
+  public function orderBy(string $column, string $dir = 'ASC'): Query
+  {
     array_push($this->orderBys, [
       'column' => $column,
       'dir' => $dir,
@@ -84,14 +89,15 @@ class Query {
 
   /**
    * limit
-   * 
+   *
    * Add LIMIT in this SELECT operation
    *
    * @param  int $limit
    *
    * @return Query
    */
-  public function limit(int $limit): Query {
+  public function limit(int $limit): Query
+  {
     $this->limit = $limit;
 
     return $this;
@@ -99,14 +105,15 @@ class Query {
 
   /**
    * offset
-   * 
+   *
    * Add OFFSET in this SELECT operation
    *
    * @param  int $offset
    *
    * @return Query
    */
-  public function offset(int $offset): Query {
+  public function offset(int $offset): Query
+  {
     $this->offset = $offset;
 
     return $this;
@@ -114,23 +121,25 @@ class Query {
 
   /**
    * exec
-   * 
+   *
    * Execute the constructed SELECT operation
    *
    * @return array
    */
-  public function exec(): array {
+  public function exec(): array
+  {
     return Database::query($this);
   }
 
   /**
    * toString
-   * 
+   *
    * Return the SQL query
    *
    * @return string
    */
-  public function toString(): string {
+  public function toString(): string
+  {
     return Database::selectToString($this);
   }
 }

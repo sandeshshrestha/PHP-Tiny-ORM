@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Delete.php
  */
@@ -9,10 +10,10 @@ use TinyORM\Database;
 
 /**
  * Delete class
- * 
+ *
  * This class holds all the information regarding DELETE operation,
  * that will be used by Database class.
- * 
+ *
  * **Example**
  * ```
  * $deleteOperation = new Delete('User');
@@ -20,7 +21,8 @@ use TinyORM\Database;
  * $deleteOperation->exec();
  * ```
  */
-class Delete {
+class Delete
+{
   /** @var string $table Database table */
   public $table;
   /** @var array $where Where*/
@@ -33,13 +35,14 @@ class Delete {
    *
    * @return void
    */
-  public function __construct(string $table) {
+  public function __construct(string $table)
+  {
     $this->table = $table;
   }
 
   /**
    * where
-   * 
+   *
    * Add where condition in this DELETE operation
    *
    * @param  string $column Name of the database table column
@@ -48,12 +51,13 @@ class Delete {
    *
    * @return Delete
    */
-  public function where(string $column, string $operator, string $value = ''): Delete {
+  public function where(string $column, string $operator, string $value = ''): Delete
+  {
     if (!$value) {
       $value = $operator;
       $operator = '=';
     }
-    
+
     array_push($this->where, [
       'column' => $column,
       'operator' => $operator,
@@ -65,20 +69,21 @@ class Delete {
 
   /**
    * exec
-   * 
+   *
    * Execute the constructed DELETE operation
    *
    * @return bool
    */
-  public function exec(): bool {
+  public function exec(): bool
+  {
     return Database::delete($this);
   }
 
   /**
    * toString
-   * 
+   *
    * Return the SQL query
-   * 
+   *
    * **Example**
    * ```
    * $deleteOperation = new Delete('User');
@@ -89,7 +94,8 @@ class Delete {
    *
    * @return string
    */
-  public function toString(): string {
+  public function toString(): string
+  {
     return Database::deleteToString($this);
   }
 }
