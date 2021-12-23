@@ -43,6 +43,13 @@ class Model
   /** @var array $fillable Table columns*/
   protected $fillable = [];
 
+  function __construct() {
+    $this->{$this->getPrimaryKey()} = '';
+    foreach ($this->fillable as $value) {
+      $this->{$value} = '';
+    }
+  }
+
   /**
    * getTable
    *

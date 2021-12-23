@@ -24,6 +24,7 @@ class MYSQLDatabase implements IDatabase
 {
   /** @var mysqli $conn MySql connection*/
   private static $conn = null;
+  private static $table_prefix = __DATABASE_CONFIG__['table_prefix'] ?? '';
 
   /**
    * connection
@@ -34,15 +35,28 @@ class MYSQLDatabase implements IDatabase
    */
   private static function &connection()
   {
-    $host = __DATABASE_CONFIG__['host'];
-    $username = __DATABASE_CONFIG__['username'];
-    $password = __DATABASE_CONFIG__['password'];
-    $database = __DATABASE_CONFIG__['database'];
-    $port = __DATABASE_CONFIG__['port'];
+    $host = __DATABASE_CONFIG__['host'] ?? '';
+    $username = __DATABASE_CONFIG__['username'] ?? '';
+    $password = __DATABASE_CONFIG__['password'] ?? '';
+    $database = __DATABASE_CONFIG__['database'] ?? '';
+    $port = __DATABASE_CONFIG__['port'] ?? '3306';
+
+    if (!$host) {
+      throw new Exception('Database host not set');
+    }
+    if (!$username) {
+      throw new Exception('Database username not set');
+    }
+    if (!$password) {
+      throw new Exception('Database password not set');
+    }
+    if (!$database) {
+      throw new Exception('Database name not set');
+    }
 
     if (self::$conn == NULL) {
       self::$conn = new mysqli($host, $username, $password, $database, $port ? $port : 3306);
-      if ($mysqli->connect_errno) {
+      if (self::$conn->connect_errno) {
         die("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
       }
     }
@@ -61,8 +75,7 @@ class MYSQLDatabase implements IDatabase
    */
   public static function selectToString(Query $query): string
   {
-    $table_prefix = __DATABASE_CONFIG__['table_prefix'];
-    $table = $table_prefix . $query->table;
+    $table = self::$table_prefix . $query->table;
     $limit = $query->limit;
     $offset = $query->offset;
     $where = $query->where;
@@ -117,8 +130,7 @@ class MYSQLDatabase implements IDatabase
    */
   public static function insertToString(Insert $query): string
   {
-    $table_prefix = __DATABASE_CONFIG__['table_prefix'];
-    $table = $table_prefix . $query->table;
+    $table = self::$table_prefix . $query->table;
     $data = $query->data;
 
     $sql = "INSERT INTO $table";
@@ -149,8 +161,7 @@ class MYSQLDatabase implements IDatabase
    */
   public static function updateToString(Update $query): string
   {
-    $table_prefix = __DATABASE_CONFIG__['table_prefix'];
-    $table = $table_prefix . $query->table;
+    $table = self::$table_prefix . $query->table;
     $data = $query->data;
     $where = $query->where;
     $whereLength = sizeof($where);
@@ -192,8 +203,7 @@ class MYSQLDatabase implements IDatabase
    */
   public static function deleteToString(Delete $query): string
   {
-    $table_prefix = __DATABASE_CONFIG__['table_prefix'];
-    $table = $table_prefix . $query->table;
+    $table = self::$table_prefix . $query->table;
     $where = $query->where;
     $whereLength = sizeof($where);
 

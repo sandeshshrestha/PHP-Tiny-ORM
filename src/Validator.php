@@ -69,14 +69,14 @@ class Validator
     $data = $this->data;
 
     foreach ($this->config as $key => $value) {
-      $required = $value['required'];
-      $type = $value['type'];
-      $unique = $value['unique'];
-      $confirmed = $value['confirmed'];
-      $exists = $value['exists'];
+      $required = $value['required'] ?? false;
+      $type = $value['type'] ?? '';
+      $unique = $value['unique'] ?? '';
+      $confirmed = $value['confirmed'] ?? '';
+      $exists = $value['exists'] ?? '';
       $err = '';
 
-      $val = $data[$key];
+      $val = $data[$key] ?? '';
 
       if ($required && !$val) {
         $err = "$key cannot be empty.";
@@ -101,11 +101,11 @@ class Validator
               $err = "$key and $key_confirmed does not match";
             }
           } elseif ($exists) {
-            $abdfd = explode(',', $exists);
+            $abdfd = explode('.', $exists);
             $query = new Query($abdfd[0]);
             $_key = $key;
 
-            if ($abdfd[1]) {
+            if (count($abdfd) > 1 && $abdfd[1]) {
               $_key = $abdfd[1];
             }
 
