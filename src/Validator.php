@@ -35,8 +35,6 @@ class Validator
   protected $data;
   /** @var array $config Config*/
   protected $config;
-  /** @var bool $_isValid Is valid*/
-  protected $_isValid;
   /** @var array $errors Errors*/
   protected $errors = [];
 
@@ -65,19 +63,15 @@ class Validator
    */
   protected function validate(): void
   {
-    $validation_errors = [];
+    $this->errors = [];
 
     foreach ($this->config as $key => $value) {
       $err = $this->getError($key, $value);
 
       if ($err) {
-        $validation_errors[$key] = $err;
+        $this->errors[$key] = $err;
       }
     }
-
-
-    $this->_isValid = empty($validation_errors);
-    $this->errors = $validation_errors;
   }
 
   /**
@@ -169,7 +163,7 @@ class Validator
    */
   public function isValid(): bool
   {
-    return $this->_isValid;
+    return empty($this->errors);
   }
 
   /**
