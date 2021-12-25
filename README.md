@@ -66,3 +66,15 @@ $users = User::where("fullName", "John Doe")->limit(1)->orderBy('id')->exec();
 
 ### Documentations
 [https://sandeshshrestha.github.io/PHP-Tiny-ORM/](https://sandeshshrestha.github.io/PHP-Tiny-ORM/)
+
+
+### Code quality status
+
+[![SonarCloud](https://sonarcloud.io/images/project_badges/sonarcloud-white.svg)](https://sonarcloud.io/summary/new_code?id=sandeshshrestha_PHP-Tiny-ORM)
+
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sandeshshrestha_PHP-Tiny-ORM&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=sandeshshrestha_PHP-Tiny-ORM)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=sandeshshrestha_PHP-Tiny-ORM&metric=bugs)](https://sonarcloud.io/summary/new_code?id=sandeshshrestha_PHP-Tiny-ORM)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=sandeshshrestha_PHP-Tiny-ORM&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=sandeshshrestha_PHP-Tiny-ORM)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=sandeshshrestha_PHP-Tiny-ORM&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=sandeshshrestha_PHP-Tiny-ORM)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=sandeshshrestha_PHP-Tiny-ORM&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=sandeshshrestha_PHP-Tiny-ORM)
