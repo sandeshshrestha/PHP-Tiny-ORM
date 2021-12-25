@@ -6,6 +6,7 @@
 
 namespace TinyORM;
 
+use InvalidArgumentException;
 use TinyORM\IDatabase;
 use TinyORM\Query;
 use TinyORM\Update;
@@ -42,22 +43,22 @@ class MYSQLDatabase implements IDatabase
     $port = __DATABASE_CONFIG__['port'] ?? '3306';
 
     if (!$host) {
-      throw new Exception('Database host not set');
+      throw new InvalidArgumentException('Database host not set');
     }
     if (!$username) {
-      throw new Exception('Database username not set');
+      throw new InvalidArgumentException('Database username not set');
     }
     if (!$password) {
-      throw new Exception('Database password not set');
+      throw new InvalidArgumentException('Database password not set');
     }
     if (!$database) {
-      throw new Exception('Database name not set');
+      throw new InvalidArgumentException('Database name not set');
     }
 
     if (self::$conn == NULL) {
       self::$conn = new mysqli($host, $username, $password, $database, $port ? $port : 3306);
       if (self::$conn->connect_errno) {
-        die("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
+        die("Failed to connect to MySQL: (" . self::$conn->connect_errno . ") " . self::$conn->connect_error);
       }
     }
 
@@ -326,6 +327,6 @@ class MYSQLDatabase implements IDatabase
     ) {
       return $operator;
     }
-    throw new \Exception("Invalid operator: $operator");
+    throw new InvalidArgumentException("Invalid operator: $operator");
   }
 }

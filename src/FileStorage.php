@@ -63,9 +63,9 @@ class FileStorage
       mkdir($absoluteFolder, 0777, true);
     }
 
-    $file = fopen($absoluteFile, "w") or die("Unable to open file!");
-    fwrite($file, $this->file->getContent());
-    fclose($file);
+    $f = fopen($absoluteFile, "w") or die("Unable to open file!");
+    fwrite($f, $this->file->getContent());
+    fclose($f);
   }
 
   /**

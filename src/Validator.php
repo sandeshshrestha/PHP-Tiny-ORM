@@ -65,71 +65,84 @@ class Validator
    */
   protected function validate(): void
   {
-    $errors = [];
-    $data = $this->data;
+    $validation_errors = [];
 
     foreach ($this->config as $key => $value) {
-      $required = $value['required'] ?? false;
-      $type = $value['type'] ?? '';
-      $unique = $value['unique'] ?? '';
-      $confirmed = $value['confirmed'] ?? '';
-      $exists = $value['exists'] ?? '';
-      $err = '';
+      $err = $this->getError($key, $value);
 
-      $val = $data[$key] ?? '';
+      if ($err) {
+        $validation_errors[$key] = $err;
+      }
+    }
 
-      if ($required && !$val) {
-        $err = "$key cannot be empty.";
-      } else {
-        if ($val) {
-          if ($type === 'email' && !filter_var($val, FILTER_VALIDATE_EMAIL)) {
-            $err = "Invalid email.";
-          } elseif ($unique) {
-            $query = new Query($unique);
-            $rows = $query->where($key, $val)->limit(1)->exec();
 
-            if (sizeof($rows) > 0) {
-              $err = "$val already exists.";
-            }
-          } elseif ($confirmed) {
-            $key_confirmed = $key . "_confirmation";
-            $val_confirmed = $data[$key_confirmed];
+    $this->_isValid = empty($validation_errors);
+    $this->errors = $validation_errors;
+  }
 
-            if (!$val_confirmed) {
-              $err = "$key_confirmed cannot be empty.";
-            } elseif ($val !== $val_confirmed) {
-              $err = "$key and $key_confirmed does not match";
-            }
-          } elseif ($exists) {
-            $abdfd = explode('.', $exists);
-            $query = new Query($abdfd[0]);
-            $_key = $key;
+  /**
+   * validate
+   *
+   * Method that calculate if the 'data.item' is valid according to 'config'
+   *
+   * @return void
+   */
+  protected function getError($key, $keyConfig): string
+  {
+    $required = $keyConfig['required'] ?? false;
+    $type = $keyConfig['type'] ?? '';
+    $unique = $keyConfig['unique'] ?? '';
+    $confirmed = $keyConfig['confirmed'] ?? '';
+    $exists = $keyConfig['exists'] ?? '';
 
-            if (count($abdfd) > 1 && $abdfd[1]) {
-              $_key = $abdfd[1];
-            }
+    $val = $this->data[$key] ?? '';
 
-            $rows = $query->where($_key, $val)->limit(1)->exec();
+    if ($val) {
 
-            if (sizeof($rows) === 0) {
-              $err = "$val doesnot exists.";
-            }
-          }
+      if ($type === 'email' && !filter_var($val, FILTER_VALIDATE_EMAIL)) {
+        return 'Invalid email.';
+      }
+
+      if ($unique && $this->rowExists($unique, $key, $val)) {
+        return "$val already exists.";
+      }
+
+      if ($confirmed && $val !== $this->data[$key . "_confirmation"] ?? '') {
+        return "$key does not match with confirmation";
+      }
+
+      if ($exists) {
+        $abdfd = explode('.', $exists);
+        $_key = $abdfd[1] ?? $key;
+
+        if (!$this->rowExists($abdfd[0], $_key, $val)) {
+          return "$val doesnot exists.";
         }
       }
 
-      if ($err) {
-        $errors[$key] = $err;
-      }
+      return '';
     }
 
-    if (sizeof($errors) > 0) {
-      $this->_isValid = false;
-      $this->errors = $errors;
-    } else {
-      $this->_isValid = true;
-      $this->errors = [];
+    if ($required) {
+      return "$key cannot be empty.";
     }
+
+    return '';
+  }
+
+  /**
+   * rowExists
+   *
+   * Method to check if a row exists in a table
+   *
+   * @return void
+   */
+  protected function rowExists($tableName, $columnName, $value): bool
+  {
+    $query = new Query($tableName);
+    $rows = $query->where($columnName, $value)->limit(1)->exec();
+
+    return !empty($rows);
   }
 
   /**

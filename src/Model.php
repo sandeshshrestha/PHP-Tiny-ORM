@@ -116,7 +116,7 @@ class Model
 
     $rows = $query->exec();
 
-    if (sizeof($rows) > 0) {
+    if (!empty($rows)) {
       return self::array2obj($rows[0], $obj);
     }
 
